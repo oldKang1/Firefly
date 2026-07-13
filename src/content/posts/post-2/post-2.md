@@ -10,16 +10,23 @@ draft: false
 ---
 
 project/
+
 ├── data.py          # 1. 数据准备（Dataset, DataLoader）
+
 ├── model.py         # 2. 模型结构（神经网络定义）
+
 ├── train.py         # 3. 核心训练与验证逻辑
+
 ├── config.py        # 4. 超参数配置
+
 └── predict.py       # 5. 推理与测试
 
-1. config.py（参数配给中心）
-别把学率、Batch Size 硬编码在代码里，统一放这里。
 
-Python
+## 1. config.py（参数配给中心）
+
+别把学习率、Batch Size 硬编码在代码里，统一放这里。
+
+```python
 import torch
 
 class Config:
@@ -36,9 +43,6 @@ class Config:
     MODEL_SAVE_PATH = "./best_model.pth"
 
 2. data.py（数据流水线）
-负责把你的原始数据变成 PyTorch 能直接迭代的 DataLoader。
-
-Python
 import torch
 from torch.utils.data import Dataset, DataLoader
 
@@ -73,9 +77,6 @@ def get_loaders(config):
     return train_loader, val_loader
 
 3. model.py（网络架构）
-只负责网络的前向传播逻辑，不要塞入任何训练代码。
-
-Python
 import torch
 import torch.nn as nn
 
@@ -93,10 +94,7 @@ class MyNetwork(nn.Module):
         #  【填空】：编排前向传播的顺序
         return self.network(x)
 
-4. train.py（核心训练引擎）
-这是最标准的标准训练流：前向传播 -> 计算损失 -> 梯度清零 -> 反向传播 -> 优化器迭代。
-
-Python
+4. train.py
 import torch
 import torch.nn as nn
 from config import Config
@@ -171,3 +169,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
